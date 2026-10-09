@@ -21,6 +21,9 @@ const rBin = fs.readFileSync(path.join(__dirname, 'retrato', 'r.bin'));
 const rNome = 'r-' + require('crypto').createHash('md5').update(rBin).digest('hex').slice(0, 8) + '.bin';
 const ogBin = fs.readFileSync(path.join(__dirname, 'retrato', 'og.png'));
 const ogNome = 'og-' + require('crypto').createHash('md5').update(ogBin).digest('hex').slice(0, 8) + '.png';
+const mini = f => fs.readFileSync(path.join(__dirname, f), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/[^\n]*/g, '$1').replace(/\s*\n\s*/g, ' ').replace(/\s{2,}/g, ' ').trim();
+const DEMO_CSS = mini('demo.css').replace(/ ?([{};:,]) /g, '$1');
+const DEMO_JS = mini('demo.js');
 const HOLO = fs.readFileSync(path.join(__dirname, 'holo.js'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/[^\n]*/g, '$1').replace(/\s*\n\s*/g, ' ').replace(/\s{2,}/g, ' ').trim();
 
 const T = require('./conteudo')(SITE);
@@ -116,6 +119,34 @@ document.addEventListener("visibilitychange",function(){if(!document.hidden&&!r)
 r=requestAnimationFrame(l)})();
 `.replace(/\n/g, '');
 
+
+/** Cartão de produto com demo animado (aparece no hover/foco/toque; ver demo.js e demo.css). */
+function cartaoDemo(nome, desc, i, t) {
+  const D = t.demo, k = ['a', 'b', 'p'][i];
+  const ty = (a, x) => `<span class="ty" data-t="${a}" data-x="${x}"><i></i><i></i><i></i></span>`;
+  let demo = '', len = 11000;
+  if (k === 'a') {
+    demo = `<div class="m c" data-t="500">${esc(D.a.c1)}</div>${ty(1500, 2700)}<div class="m a" data-t="2700">${esc(D.a.a1)}</div>`
+      + `<div class="cat" data-t="3300"><u></u><div>${esc(D.a.cat)}<span>${esc(D.a.catSub)}</span></div></div>`
+      + `<div class="m c" data-t="4900">${esc(D.a.c2)}</div>${ty(5700, 6700)}<div class="m a" data-t="6700">${esc(D.a.a2)}</div>`
+      + `<div class="hand" data-t="8400">${esc(D.a.h)}</div>`;
+    len = 11800;
+  } else if (k === 'b') {
+    demo = `<div class="m c" data-t="500">${esc(D.b.c1)}</div>${ty(1400, 2600)}<div class="m a" data-t="2600">${D.b.b1}</div>`
+      + `<div class="bars" data-t="3300">${[40, 55, 48, 70, 62, 100].map(h => `<i style="--h:${Math.round(h * 0.34)}px"></i>`).join('')}</div>`
+      + `<div class="m c" data-t="5200">${esc(D.b.c2)}</div>${ty(6000, 7000)}<div class="m a" data-t="7000">${esc(D.b.b2)}</div>`;
+    len = 11000;
+  } else {
+    const kp = D.p.k.map(([lab, pre, n, dec, suf]) => `<div><small>${esc(lab)}</small><b>${pre}<span data-n="${n}" data-d="${dec}" data-k="900">0</span>${suf}</b></div>`).join('');
+    const hs = [18, 24, 21, 30, 28, 40];
+    demo = `<div class="pt pn" data-t="200"><span>${esc(D.p.title)}</span><span>${esc(D.p.mes)}</span></div><div class="kp pn" data-t="500">${kp}</div>`
+      + `<div class="gr" data-t="1500">${hs.map(h => `<i style="--h:${h}px"></i>`).join('')}<svg viewBox="0 0 100 46" preserveAspectRatio="none"><path pathLength="1" vector-effect="non-scaling-stroke" d="M8 36 L24 30 L40 33 L56 21 L72 24 L92 8"/></svg></div>`
+      + `<span class="tv" data-t="3300">${esc(D.p.tv)}</span>`;
+    len = 8500;
+  }
+  return `<div class="card px" tabindex="0" role="button" aria-label="${nome}: ${esc(desc)}" data-len="${len}"><h3>${nome}</h3><p class="d">${esc(desc)}</p><span class="hint">${esc(D.hint)}</span><span class="ex">${esc(D.ex)}</span><div class="demo" aria-hidden="true">${demo}</div></div>`;
+}
+
 function pagina(k) {
   const t = T[k];
   const wa = `https://wa.me/${WHATS}?text=${encodeURIComponent(t.waText)}`;
@@ -138,7 +169,7 @@ function pagina(k) {
 <meta property="og:type" content="website"><meta property="og:title" content="${esc(t.title)}"><meta property="og:description" content="${esc(t.desc)}"><meta property="og:url" content="${t.url}"><meta property="og:locale" content="${t.og}"><meta property="og:image" content="${SITE}/${ogNome}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="preload" href="/${rNome}" as="fetch" crossorigin="anonymous">
-<style>${CSS}</style>
+<style>${CSS}${DEMO_CSS}</style>
 <script type="application/ld+json">${JSON.stringify(ld)}</script>
 </head><body>
 <a class="skip" href="#c">${t.skip}</a>
@@ -155,7 +186,7 @@ function pagina(k) {
 
 <section><h2>${t.probH}</h2><p>${esc(t.probP)}</p></section>
 <section><h2>${t.delH}</h2><div class="grid">${t.del.map(([a, b]) => `<div class="card"><h3>${esc(a)}</h3><p>${esc(b)}</p></div>`).join('')}</div></section>
-<section><h2>${t.pxH}</h2><p>${esc(t.pxP)}</p><div class="grid" style="margin:14px 0">${t.px.map(([a, b]) => `<div class="card"><h3>${a}</h3><p>${esc(b)}</p></div>`).join('')}</div><a class="btn" href="${PROXYUS}" rel="noopener">${t.pxLink}</a></section>
+<section><h2>${t.pxH}</h2><p>${esc(t.pxP)}</p><div class="grid" style="margin:14px 0">${t.px.map(([a, b], i) => cartaoDemo(a, b, i, t)).join('')}</div><a class="btn" href="${PROXYUS}" rel="noopener">${t.pxLink}</a></section>
 <section><h2>${t.howH}</h2><ol class="steps">${t.how.map(([a, b]) => `<li><b>${esc(a)}</b>${esc(b)}</li>`).join('')}</ol></section>
 <section><h2>${t.stackH}</h2><ul class="tags">${t.stack.map(s => `<li>${esc(s)}</li>`).join('')}</ul></section>
 <section><h2>${t.expH}</h2><ul class="log">${t.exp.map(([d, a, b]) => `<li><time>${esc(d)}</time><b>${esc(a)}</b><br>${esc(b)}</li>`).join('')}</ul></section>
@@ -164,7 +195,7 @@ function pagina(k) {
 <section class="final"><h2>${esc(t.ctaH)}</h2><p>${esc(t.ctaP)}</p><div class="cta"><a class="btn p" href="${wa}" rel="noopener">${t.cta1}</a><a class="btn" href="mailto:${EMAIL}">${t.cta3}</a><a class="btn" href="${LINKEDIN}" rel="me noopener">${t.cta2}</a></div></section>
 </main>
 <footer><div class="w">© ${new Date().getFullYear()} Felipe Marinho · ${t.foot}</div></footer>
-<script>${JS}</script><script>${HOLO}</script>
+<script>${JS}</script><script>${HOLO}</script><script>${DEMO_JS}</script>
 </body></html>`.replace(/>\s+</g, '><');
 }
 
