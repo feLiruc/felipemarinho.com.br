@@ -19,6 +19,8 @@ const PROXYUS = 'https://proxyus.com.br';
 // Retrato holográfico: grade 128x128 em 4 bits (gerar-retrato.py) -> r-<hash>.bin; holo.js desenha a nuvem de pontos em WebGL
 const rBin = fs.readFileSync(path.join(__dirname, 'retrato', 'r.bin'));
 const rNome = 'r-' + require('crypto').createHash('md5').update(rBin).digest('hex').slice(0, 8) + '.bin';
+const ogBin = fs.readFileSync(path.join(__dirname, 'retrato', 'og.png'));
+const ogNome = 'og-' + require('crypto').createHash('md5').update(ogBin).digest('hex').slice(0, 8) + '.png';
 const HOLO = fs.readFileSync(path.join(__dirname, 'holo.js'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/[^\n]*/g, '$1').replace(/\s*\n\s*/g, ' ').replace(/\s{2,}/g, ' ').trim();
 
 const T = {
@@ -228,7 +230,7 @@ function pagina(k) {
 <link rel="canonical" href="${t.url}">
 <link rel="alternate" hreflang="pt-BR" href="${SITE}/"><link rel="alternate" hreflang="en" href="${SITE}/en/"><link rel="alternate" hreflang="x-default" href="${SITE}/">
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="theme-color" content="#000000">
-<meta property="og:type" content="website"><meta property="og:title" content="${esc(t.title)}"><meta property="og:description" content="${esc(t.desc)}"><meta property="og:url" content="${t.url}"><meta property="og:locale" content="${t.og}"><meta property="og:image" content="${SITE}/og-3d.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:type" content="website"><meta property="og:title" content="${esc(t.title)}"><meta property="og:description" content="${esc(t.desc)}"><meta property="og:url" content="${t.url}"><meta property="og:locale" content="${t.og}"><meta property="og:image" content="${SITE}/${ogNome}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="preload" href="/${rNome}" as="fetch" crossorigin="anonymous">
 <style>${CSS}</style>
@@ -265,6 +267,8 @@ const dist = path.join(__dirname, 'dist');
 fs.mkdirSync(path.join(dist, 'en'), { recursive: true });
 for (const f of fs.readdirSync(dist)) if (/^r-[0-9a-f]{8}\.bin$/.test(f)) fs.unlinkSync(path.join(dist, f));
 fs.writeFileSync(path.join(dist, rNome), rBin);
+for (const f of fs.readdirSync(dist)) if (/^og(-[0-9a-f]{8}|-3d)?\.png$/.test(f)) fs.unlinkSync(path.join(dist, f));
+fs.writeFileSync(path.join(dist, ogNome), ogBin);
 fs.writeFileSync(path.join(dist, 'index.html'), pagina('pt'));
 fs.writeFileSync(path.join(dist, 'en', 'index.html'), pagina('en'));
 fs.writeFileSync(path.join(dist, 'favicon.svg'), '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#000"/><text x="4" y="22" font-family="monospace" font-size="18" font-weight="700" fill="#00ff41">&gt;_</text></svg>');

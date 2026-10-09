@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Gera dist/og-3d.png (imagem de compartilhamento 1200x630) com o retrato holográfico real.
+ * Gera retrato/og.png (imagem de compartilhamento 1200x630) com o retrato holográfico real.
  * Precisa do Brave/Chrome e de um servidor estático em dist/:
  *   (cd dist && python -m http.server 8800) &   node gerar-og.js
  */
@@ -15,6 +15,6 @@ fs.writeFileSync(path.join(dist, '_og.html'), html);
 try {
   const brave = process.env.BROWSER_EXE || 'C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe';
   execFileSync(brave, ['--headless=new', '--disable-gpu', '--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--hide-scrollbars', '--force-device-scale-factor=1',
-    '--window-size=1200,630', '--virtual-time-budget=4000', `--screenshot=${path.join(dist, 'og-3d.png')}`, 'http://localhost:8800/_og.html'], { stdio: 'ignore' });
+    '--window-size=1200,630', '--virtual-time-budget=4000', `--screenshot=${path.join(__dirname, 'retrato', 'og.png')}`, 'http://localhost:8800/_og.html'], { stdio: 'ignore' });
 } finally { fs.unlinkSync(path.join(dist, '_og.html')); }
-console.log('dist/og-3d.png gerado');
+console.log('retrato/og.png gerado (rode node build.js para publicar com hash no nome)');
