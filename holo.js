@@ -66,7 +66,7 @@
     for (i = 0; i < N; i++) {
       var b = 0.25 + 0.75 * L[i];
       cx.fillStyle = 'rgb(0,' + (255 * b | 0) + ',' + (60 * b | 0) + ')';
-      cx.fillText(GL[Math.min(n - 1, Math.round(L[i] * (n - 1) + (R[i] - 0.5) * 4) | 0)].ch, (P[i * 3] + 1) / 2 * w * 0.86 + w * 0.07, (1 - P[i * 3 + 1]) / 2 * w * 0.86 + w * 0.07);
+      cx.fillText(GL[Math.min(n - 1, Math.round(L[i] * (n - 1) + (R[i] - 0.5) * 4) | 0)].ch, (P[i * 3] + 1) / 2 * w * 0.86 + w * 0.07, (1 - P[i * 3 + 1]) / 2 * w * 0.86 + w * 0.07 - w * 0.05);
     }
   }
 
@@ -91,7 +91,7 @@
       'attribute vec3 p;attribute float l;attribute float r;uniform float yw,pt,t,k,n;varying float b;varying vec2 gc;varying float sw;' +
       'void main(){float cy=cos(yw),sy=sin(yw),cp=cos(pt),sp=sin(pt);vec3 q=p;q.z-=.3;' +
       'q=vec3(cy*q.x+sy*q.z,q.y,-sy*q.x+cy*q.z);q=vec3(q.x,cp*q.y-sp*q.z,sp*q.y+cp*q.z);' +
-      'float f=2.8/(2.8-q.z);gl_Position=vec4(q.xy*f*.86,-q.z*.3,1.);' +
+      'float f=2.8/(2.8-q.z);gl_Position=vec4(q.xy*f*.86+vec2(.0,.1),-q.z*.3,1.);' +
       'sw=smoothstep(.07,0.,abs(fract(t*.22)*2.8-1.4-p.y));' +
       // caractere: posição na escala "leve -> cheio" pelo brilho, com troca aleatória a cada ~0,3 s (chuva digital)
       'float h=fract(sin(dot(vec2(r*91.7,floor(t*3.+r*5.)),vec2(12.9898,78.233)))*43758.5453);' +

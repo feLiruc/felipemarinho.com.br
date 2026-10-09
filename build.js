@@ -66,7 +66,10 @@ h1 span{color:var(--g);text-shadow:0 0 14px rgba(0,255,65,.7)}
 .fig{position:relative;justify-self:center;width:100%;max-width:400px;aspect-ratio:1}
 .fig::before{content:"";position:absolute;inset:6%;background:radial-gradient(circle,rgba(0,255,65,.2),transparent 68%);filter:blur(12px)}
 .fig canvas{position:relative;display:block;width:100%;height:100%;opacity:0;transition:opacity .6s;-webkit-mask-image:radial-gradient(closest-side,#000 62%,transparent 100%);mask-image:radial-gradient(closest-side,#000 62%,transparent 100%)}
-.fig::after{content:"";position:absolute;inset:4%;border-radius:50%;border:1px solid rgba(0,255,65,.3);box-shadow:0 0 24px rgba(0,255,65,.16),inset 0 0 30px rgba(0,255,65,.1);pointer-events:none}
+.fig::after{content:"";position:absolute;inset:4%;border-radius:50%;border:1px solid rgba(0,255,65,.22);box-shadow:0 0 18px rgba(0,255,65,.1),inset 0 0 24px rgba(0,255,65,.08);pointer-events:none}
+.fig .rg{position:absolute;inset:4%;border-radius:50%;filter:drop-shadow(0 0 5px rgba(0,255,65,.7));pointer-events:none}
+.fig .rg i{display:block;width:100%;height:100%;border-radius:50%;background:conic-gradient(from 0deg,rgba(0,255,65,0) 0,rgba(0,255,65,0) 52%,rgba(0,255,65,.18) 72%,rgba(0,255,65,.95) 100%);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));animation:giro 7s linear infinite}
+@keyframes giro{to{transform:rotate(360deg)}}
 .fig canvas.on{opacity:1}
 section{padding:34px 0}
 h2{font-size:clamp(20px,3.2vw,28px);color:var(--g);text-shadow:0 0 10px rgba(0,255,65,.4);margin-bottom:16px;text-wrap:balance}
@@ -99,7 +102,7 @@ details p{padding:0 16px 14px;color:var(--tx);font-size:15px}
 .final .cta{justify-content:center}
 footer{position:relative;z-index:2;border-top:1px solid var(--g3);padding:22px 0 40px;color:var(--mut);font-size:14px;text-align:center}
 @media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:26px}.fig{max-width:230px;order:-1}.term{max-width:none;font-size:13px}.cta .btn{width:100%;text-align:center}header .btn{padding:7px 12px;font-size:13px;white-space:nowrap}.logo{white-space:nowrap}.logo span{display:none}}
-@media(prefers-reduced-motion:reduce){.term div{animation:none;width:100%}html{scroll-behavior:auto}}
+@media(prefers-reduced-motion:reduce){.term div{animation:none;width:100%}.fig .rg i{animation:none;transform:rotate(40deg)}html{scroll-behavior:auto}}
 `.replace(/\s*\n\s*/g, '').replace(/;}/g, '}');
 
 const JS = `
@@ -148,7 +151,7 @@ function pagina(k) {
 <p class="sub">${t.sub}</p>
 <div class="cta"><a class="btn p" href="${wa}" rel="noopener">${t.cta1}</a><a class="btn" href="${LINKEDIN}" rel="me noopener">${t.cta2}</a><a class="btn" href="mailto:${EMAIL}">${t.cta3}</a></div>
 <ul class="badges">${t.badges.map(b => `<li>${esc(b)}</li>`).join('')}</ul>
-</div><div class="fig"><canvas id="h" data-src="/${rNome}" role="img" aria-label="${k === 'pt' ? 'Retrato holográfico 3D de Felipe Marinho, engenheiro de dados' : '3D holographic portrait of Felipe Marinho, data engineer'}"></canvas></div></div>
+</div><div class="fig"><span class="rg"><i></i></span><canvas id="h" data-src="/${rNome}" role="img" aria-label="${k === 'pt' ? 'Retrato holográfico 3D de Felipe Marinho, engenheiro de dados' : '3D holographic portrait of Felipe Marinho, data engineer'}"></canvas></div></div>
 
 <section><h2>${t.probH}</h2><p>${esc(t.probP)}</p></section>
 <section><h2>${t.delH}</h2><div class="grid">${t.del.map(([a, b]) => `<div class="card"><h3>${esc(a)}</h3><p>${esc(b)}</p></div>`).join('')}</div></section>
