@@ -16,7 +16,10 @@ const EMAIL = 'contato@proxyus.com.br';
 const WHATS = '5543910174744';            // (43) 91017-4744, WhatsApp comercial da ProxyUS
 const PROXYUS = 'https://proxyus.com.br';
 
-const caricatura = fs.readFileSync(path.join(__dirname, 'caricatura.svg'), 'utf8').replace(/\s*\n\s*/g, '');
+// Retrato holográfico: grade 128x128 em 4 bits (gerar-retrato.py) -> r-<hash>.bin; holo.js desenha a nuvem de pontos em WebGL
+const rBin = fs.readFileSync(path.join(__dirname, 'retrato', 'r.bin'));
+const rNome = 'r-' + require('crypto').createHash('md5').update(rBin).digest('hex').slice(0, 8) + '.bin';
+const HOLO = fs.readFileSync(path.join(__dirname, 'holo.js'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/[^\n]*/g, '$1').replace(/\s*\n\s*/g, ' ').replace(/\s{2,}/g, ' ').trim();
 
 const T = {
   pt: {
@@ -157,8 +160,10 @@ h1 span{color:var(--g);text-shadow:0 0 14px rgba(0,255,65,.7)}
 .cta{display:flex;flex-wrap:wrap;gap:12px}
 .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;list-style:none;padding:0}
 .badges li{border:1px solid var(--g3);color:var(--mut);padding:3px 10px;font-size:13px}
-.fig{justify-self:center;width:100%;max-width:340px;filter:drop-shadow(0 0 16px rgba(0,255,65,.45))}
-.fig svg{display:block;width:100%;height:auto;aspect-ratio:320/360}
+.fig{position:relative;justify-self:center;width:100%;max-width:380px;aspect-ratio:1}
+.fig::before{content:"";position:absolute;inset:6%;background:radial-gradient(circle,rgba(0,255,65,.2),transparent 68%);filter:blur(12px)}
+.fig canvas{position:relative;display:block;width:100%;height:100%;opacity:0;transition:opacity .6s}
+.fig canvas.on{opacity:1}
 section{padding:34px 0}
 h2{font-size:clamp(20px,3.2vw,28px);color:var(--g);text-shadow:0 0 10px rgba(0,255,65,.4);margin-bottom:16px;text-wrap:balance}
 h2::before{content:"// ";color:var(--mut)}
@@ -189,7 +194,7 @@ details p{padding:0 16px 14px;color:var(--tx);font-size:15px}
 .final p{margin-bottom:20px;color:var(--tx)}
 .final .cta{justify-content:center}
 footer{position:relative;z-index:2;border-top:1px solid var(--g3);padding:22px 0 40px;color:var(--mut);font-size:14px;text-align:center}
-@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:26px}.fig{max-width:170px;order:-1}.term{max-width:none;font-size:13px}.cta .btn{width:100%;text-align:center}header .btn{padding:7px 12px;font-size:13px;white-space:nowrap}.logo{white-space:nowrap}.logo span{display:none}}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:26px}.fig{max-width:230px;order:-1}.term{max-width:none;font-size:13px}.cta .btn{width:100%;text-align:center}header .btn{padding:7px 12px;font-size:13px;white-space:nowrap}.logo{white-space:nowrap}.logo span{display:none}}
 @media(prefers-reduced-motion:reduce){.term div{animation:none;width:100%}html{scroll-behavior:auto}}
 `.replace(/\s*\n\s*/g, '').replace(/;}/g, '}');
 
@@ -225,7 +230,7 @@ function pagina(k) {
 <meta name="robots" content="index,follow,max-image-preview:large"><meta name="theme-color" content="#000000">
 <meta property="og:type" content="website"><meta property="og:title" content="${esc(t.title)}"><meta property="og:description" content="${esc(t.desc)}"><meta property="og:url" content="${t.url}"><meta property="og:locale" content="${t.og}"><meta property="og:image" content="${SITE}/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="preload" href="/${rNome}" as="fetch" crossorigin="anonymous">
 <style>${CSS}</style>
 <script type="application/ld+json">${JSON.stringify(ld)}</script>
 </head><body>
@@ -239,7 +244,7 @@ function pagina(k) {
 <p class="sub">${t.sub}</p>
 <div class="cta"><a class="btn p" href="${wa}" rel="noopener">${t.cta1}</a><a class="btn" href="${LINKEDIN}" rel="me noopener">${t.cta2}</a><a class="btn" href="mailto:${EMAIL}">${t.cta3}</a></div>
 <ul class="badges">${t.badges.map(b => `<li>${esc(b)}</li>`).join('')}</ul>
-</div><div class="fig" role="img" aria-label="${k === 'pt' ? 'Caricatura de Felipe Marinho, engenheiro de dados' : 'Caricature of Felipe Marinho, data engineer'}">${caricatura}</div></div>
+</div><div class="fig"><canvas id="h" data-src="/${rNome}" role="img" aria-label="${k === 'pt' ? 'Retrato holográfico 3D de Felipe Marinho, engenheiro de dados' : '3D holographic portrait of Felipe Marinho, data engineer'}"></canvas></div></div>
 
 <section><h2>${t.probH}</h2><p>${esc(t.probP)}</p></section>
 <section><h2>${t.delH}</h2><div class="grid">${t.del.map(([a, b]) => `<div class="card"><h3>${esc(a)}</h3><p>${esc(b)}</p></div>`).join('')}</div></section>
@@ -252,12 +257,14 @@ function pagina(k) {
 <section class="final"><h2>${esc(t.ctaH)}</h2><p>${esc(t.ctaP)}</p><div class="cta"><a class="btn p" href="${wa}" rel="noopener">${t.cta1}</a><a class="btn" href="mailto:${EMAIL}">${t.cta3}</a><a class="btn" href="${LINKEDIN}" rel="me noopener">${t.cta2}</a></div></section>
 </main>
 <footer><div class="w">© ${new Date().getFullYear()} Felipe Marinho · ${t.foot}</div></footer>
-<script>${JS}</script>
+<script>${JS}</script><script>${HOLO}</script>
 </body></html>`.replace(/>\s+</g, '><');
 }
 
 const dist = path.join(__dirname, 'dist');
 fs.mkdirSync(path.join(dist, 'en'), { recursive: true });
+for (const f of fs.readdirSync(dist)) if (/^r-[0-9a-f]{8}\.bin$/.test(f)) fs.unlinkSync(path.join(dist, f));
+fs.writeFileSync(path.join(dist, rNome), rBin);
 fs.writeFileSync(path.join(dist, 'index.html'), pagina('pt'));
 fs.writeFileSync(path.join(dist, 'en', 'index.html'), pagina('en'));
 fs.writeFileSync(path.join(dist, 'favicon.svg'), '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#000"/><text x="4" y="22" font-family="monospace" font-size="18" font-weight="700" fill="#00ff41">&gt;_</text></svg>');
@@ -276,6 +283,7 @@ ExpiresByType text/html "access plus 10 minutes"
 ExpiresByType image/svg+xml "access plus 30 days"
 ExpiresByType image/png "access plus 30 days"
 ExpiresByType image/jpeg "access plus 30 days"
+ExpiresByType application/octet-stream "access plus 30 days"
 </IfModule>
 <IfModule mod_headers.c>
 Header always set X-Content-Type-Options "nosniff"
