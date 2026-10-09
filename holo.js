@@ -9,8 +9,9 @@
 
   function decode(b) {
     var xs = [], ys = [], ls = [], i, v, x, y, H = { cx: b[0], cy: b[1], rx: b[2], ry: b[3], ty: b[4], ts: b[5] || 30 };
+    G = b[6] || 128;
     for (i = 0; i < G * G; i++) {
-      v = (i & 1) ? b[6 + (i >> 1)] & 15 : b[6 + (i >> 1)] >> 4;
+      v = (i & 1) ? b[7 + (i >> 1)] & 15 : b[7 + (i >> 1)] >> 4;
       if (!v) continue;
       x = i % G; y = (i / G) | 0;
       xs.push(x); ys.push(y); ls.push((v - 1) / 14);
@@ -22,7 +23,7 @@
       var e = Math.pow((x - H.cx) / (H.rx * 1.3), 2) + Math.pow((y - H.cy) / (H.ry * 1.08), 2);
       var head = e < 1 ? Math.sqrt(1 - e) * 0.42 : 0;
       var t = Math.min(1, Math.max(0, (y - H.ty) / H.ts));
-      var body = t * Math.sqrt(Math.max(0, 1 - Math.pow((x - 64) / 64, 2))) * 0.22;
+      var body = t * Math.sqrt(Math.max(0, 1 - Math.pow((x - G / 2) / (G / 2), 2))) * 0.22;
       P[i * 3] = x / (G - 1) * 2 - 1;
       P[i * 3 + 1] = 1 - y / (G - 1) * 2;
       P[i * 3 + 2] = Math.max(head, body) + (ls[i] - 0.5) * 0.1;
@@ -60,7 +61,7 @@
       'b=.1+.9*pow(l,1.35)+.8*sw;gl_PointSize=k*(.95+.4*f);}'));
     g.attachShader(pr, sh(g.FRAGMENT_SHADER,
       'precision mediump float;varying float b;void main(){float a=smoothstep(.5,.12,length(gl_PointCoord-.5));' +
-      'float v=min(b*1.8,1.)*a;gl_FragColor=vec4(.0,v,v*.16,v);}'));
+      'float v=min(b*1.3,1.)*a;gl_FragColor=vec4(.0,v,v*.16,v);}'));
     g.linkProgram(pr); g.useProgram(pr);
     function buf(a, n, name) {
       g.bindBuffer(g.ARRAY_BUFFER, g.createBuffer()); g.bufferData(g.ARRAY_BUFFER, a, g.STATIC_DRAW);
