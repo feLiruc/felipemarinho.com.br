@@ -63,9 +63,10 @@ h1 span{color:var(--g);text-shadow:0 0 14px rgba(0,255,65,.7)}
 .cta{display:flex;flex-wrap:wrap;gap:12px}
 .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;list-style:none;padding:0}
 .badges li{border:1px solid var(--g3);color:var(--mut);padding:3px 10px;font-size:13px}
-.fig{position:relative;justify-self:center;width:100%;max-width:380px;aspect-ratio:1}
+.fig{position:relative;justify-self:center;width:100%;max-width:400px;aspect-ratio:1}
 .fig::before{content:"";position:absolute;inset:6%;background:radial-gradient(circle,rgba(0,255,65,.2),transparent 68%);filter:blur(12px)}
-.fig canvas{position:relative;display:block;width:100%;height:100%;opacity:0;transition:opacity .6s}
+.fig canvas{position:relative;display:block;width:100%;height:100%;opacity:0;transition:opacity .6s;-webkit-mask-image:radial-gradient(closest-side,#000 62%,transparent 100%);mask-image:radial-gradient(closest-side,#000 62%,transparent 100%)}
+.fig::after{content:"";position:absolute;inset:4%;border-radius:50%;border:1px solid rgba(0,255,65,.3);box-shadow:0 0 24px rgba(0,255,65,.16),inset 0 0 30px rgba(0,255,65,.1);pointer-events:none}
 .fig canvas.on{opacity:1}
 section{padding:34px 0}
 h2{font-size:clamp(20px,3.2vw,28px);color:var(--g);text-shadow:0 0 10px rgba(0,255,65,.4);margin-bottom:16px;text-wrap:balance}
