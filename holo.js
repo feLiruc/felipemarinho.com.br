@@ -20,12 +20,12 @@
     for (i = 0; i < N; i++) {
       x = xs[i]; y = ys[i];
       var e = Math.pow((x - H.cx) / (H.rx * 1.3), 2) + Math.pow((y - H.cy) / (H.ry * 1.08), 2);
-      var head = e < 1 ? Math.sqrt(1 - e) * 0.9 : 0;
+      var head = e < 1 ? Math.sqrt(1 - e) * 0.42 : 0;
       var t = Math.min(1, Math.max(0, (y - H.ty) / H.ts));
-      var body = t * Math.sqrt(Math.max(0, 1 - Math.pow((x - 64) / 64, 2))) * 0.45;
+      var body = t * Math.sqrt(Math.max(0, 1 - Math.pow((x - 64) / 64, 2))) * 0.22;
       P[i * 3] = x / (G - 1) * 2 - 1;
       P[i * 3 + 1] = 1 - y / (G - 1) * 2;
-      P[i * 3 + 2] = Math.max(head, body) + (ls[i] - 0.5) * 0.16;
+      P[i * 3 + 2] = Math.max(head, body) + (ls[i] - 0.5) * 0.1;
       L[i] = ls[i];
     }
   }
