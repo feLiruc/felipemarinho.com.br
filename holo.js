@@ -8,9 +8,9 @@
   var P, L, N = 0;
 
   function decode(b) {
-    var xs = [], ys = [], ls = [], i, v, x, y;
+    var xs = [], ys = [], ls = [], i, v, x, y, H = { cx: b[0], cy: b[1], rx: b[2], ry: b[3], ty: b[4], ts: b[5] || 30 };
     for (i = 0; i < G * G; i++) {
-      v = (i & 1) ? b[i >> 1] & 15 : b[i >> 1] >> 4;
+      v = (i & 1) ? b[6 + (i >> 1)] & 15 : b[6 + (i >> 1)] >> 4;
       if (!v) continue;
       x = i % G; y = (i / G) | 0;
       xs.push(x); ys.push(y); ls.push((v - 1) / 14);
@@ -19,10 +19,10 @@
     P = new Float32Array(N * 3); L = new Float32Array(N);
     for (i = 0; i < N; i++) {
       x = xs[i]; y = ys[i];
-      var e = Math.pow((x - 63) / 25, 2) + Math.pow((y - 42) / 40, 2);
+      var e = Math.pow((x - H.cx) / (H.rx * 1.3), 2) + Math.pow((y - H.cy) / (H.ry * 1.08), 2);
       var head = e < 1 ? Math.sqrt(1 - e) * 0.9 : 0;
-      var t = Math.min(1, Math.max(0, (y - 78) / 30));
-      var body = t * Math.sqrt(Math.max(0, 1 - Math.pow((x - 64) / 62, 2))) * 0.45;
+      var t = Math.min(1, Math.max(0, (y - H.ty) / H.ts));
+      var body = t * Math.sqrt(Math.max(0, 1 - Math.pow((x - 64) / 64, 2))) * 0.45;
       P[i * 3] = x / (G - 1) * 2 - 1;
       P[i * 3 + 1] = 1 - y / (G - 1) * 2;
       P[i * 3 + 2] = Math.max(head, body) + (ls[i] - 0.5) * 0.16;
