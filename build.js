@@ -23,106 +23,7 @@ const ogBin = fs.readFileSync(path.join(__dirname, 'retrato', 'og.png'));
 const ogNome = 'og-' + require('crypto').createHash('md5').update(ogBin).digest('hex').slice(0, 8) + '.png';
 const HOLO = fs.readFileSync(path.join(__dirname, 'holo.js'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/[^\n]*/g, '$1').replace(/\s*\n\s*/g, ' ').replace(/\s{2,}/g, ' ').trim();
 
-const T = {
-  pt: {
-    lang: 'pt-BR', alt: 'en', altUrl: SITE + '/en/', url: SITE + '/', og: 'pt_BR',
-    title: 'Engenheiro de Dados em Londrina | Migração SQL Server para Databricks | Felipe Marinho',
-    desc: 'Engenheiro de Dados com 9+ anos. Migro rotinas legadas de SQL Server para PySpark no Databricks sem perder regra de negócio, com reconciliação que prova o resultado. Azure, Delta Lake, ADF, dbt. Remoto, UTC-3.',
-    skip: 'Ir para o conteúdo',
-    switchLabel: 'EN', switchTitle: 'Read in English',
-    term: ['whoami', 'felipe_marinho // engenheiro_de_dados', 'stack', 'azure databricks pyspark delta sql', 'status', 'aberto a projetos remotos'],
-    h1a: 'Seu SQL Server legado,', h1b: 'agora em Lakehouse.',
-    sub: 'Sou Felipe Marinho, Engenheiro de Dados com 9+ anos. Transformo stored procedures e rotinas em lote em pipelines PySpark no Azure Databricks, <b>preservando a regra de negócio</b> e <b>provando com reconciliação</b> que o resultado novo bate com o antigo.',
-    cta1: 'Falar no WhatsApp', cta2: 'Ver LinkedIn', cta3: 'Enviar e-mail',
-    waText: 'Olá Felipe, vi seu site e quero conversar sobre dados.',
-    badges: ['9+ anos em dados', 'Azure · Databricks · GCP', 'Londrina/PR · remoto UTC-3', 'Inglês avançado'],
-    probH: 'O problema', probP: 'Anos de regra de negócio morando em stored procedures que ninguém quer mexer. Rotinas em lote que levam horas, relatórios que atrasam e um servidor que custa caro para fazer o que a nuvem faz melhor. Migrar dá medo porque ninguém consegue provar que o número novo é igual ao antigo.',
-    delH: 'O que eu entrego',
-    del: [
-      ['Migração SQL Server para Databricks', 'T-SQL e rotinas em lote viram PySpark e Delta Lake, com a regra de negócio preservada e controles de reconciliação que comparam a saída nova com a antiga.'],
-      ['Pipelines ETL/ELT', 'Azure Data Factory, Databricks, dbt e Airflow: cargas incrementais, monitoramento e alertas para você saber antes do usuário.'],
-      ['Lakehouse e arquitetura medalhão', 'Camadas bronze, prata e ouro em Delta Lake no ADLS Gen2, com modelagem e ajuste de performance.'],
-      ['BI e dashboards', 'Power BI, Qlik Sense e QlikView ligados a dados confiáveis, para a diretoria decidir sem planilha paralela.'],
-      ['Qualidade e governança', 'Validação, profiling, testes origem-destino, LGPD, auditoria e controle de acesso.'],
-    ],
-    howH: 'Como trabalho',
-    how: [['Diagnóstico', 'Inventário das rotinas, dependências e regras de negócio.'], ['Migração em lotes', 'PySpark e Delta Lake, uma rotina por vez, sem parar a operação.'], ['Reconciliação', 'Totais e linhas comparados entre o legado e o novo, com relatório de diferenças.'], ['Operação', 'Monitoramento, alertas e documentação para o time assumir.']],
-    stackH: 'Stack',
-    stack: ['Azure Data Factory', 'Azure Databricks', 'ADLS Gen2', 'Apache Spark', 'PySpark', 'Delta Lake', 'dbt', 'Airflow', 'SQL Server', 'T-SQL', 'PostgreSQL', 'BigQuery', 'Dataflow', 'Power BI', 'Qlik Sense', 'Python'],
-    expH: 'Trajetória',
-    exp: [
-      ['2025 → hoje', 'Engenheiro de Dados · AGGRANDIZE', 'Pipelines no Azure Data Factory e Databricks, dashboards em Power BI, LGPD e controle de acesso. Contrato, remoto.'],
-      ['2023 → 2025', 'Engenheiro de Dados · Localiza&Co', 'Python, dbt, Airflow e Google Cloud (BigQuery, Dataflow, Cloud Storage).'],
-      ['2021 → 2023', 'Consultor de BI · Unidas', 'ETL e dashboards em QlikView e Qlik Sense. Prêmio de Prestador de Serviço Destaque da equipe de BI (2022).'],
-      ['2017 → 2021', 'Analista de Sistemas · BRID Soluções', 'Desenvolvimento full-stack em PHP e BI para o agronegócio.'],
-      ['antes', 'SAP GRC · Atos, e front-end · Agência Digital ICOMP', 'Base em sistemas, web e suporte técnico desde 2009.'],
-    ],
-    credH: 'Formação e certificações',
-    cred: ['Bacharel em Ciência da Computação, com 1 ano de estudos na Kent State University (Ohio, EUA)', 'Databricks Fundamentals (Academy Accreditation)', 'Google Cloud Big Data and Machine Learning Fundamentals', 'Inglês avançado'],
-    pxH: 'Também construo produtos', pxP: 'Na ProxyUS, em Londrina, crio produtos de IA e dados para empresas:',
-    px: [['AtendeAI', 'Atendente com IA no WhatsApp, 24h.'], ['BizBot', 'Converse com os dados da empresa no WhatsApp.'], ['ProxyBI', 'Todos os indicadores num só painel.']],
-    pxLink: 'Conhecer a ProxyUS',
-    faqH: 'Perguntas frequentes',
-    faq: [
-      ['Como migrar stored procedures do SQL Server para o Databricks?', 'Primeiro inventário as rotinas e suas dependências. Depois reescrevo cada uma em PySpark com Delta Lake, mantendo a regra de negócio, e valido com controles de reconciliação que comparam totais e linhas entre o legado e o novo antes de desligar o antigo.'],
-      ['Como garantir que o resultado novo é igual ao antigo?', 'Com reconciliação: comparo contagens, somas e amostras linha a linha entre as duas saídas e entrego um relatório das diferenças. Só considero a rotina migrada quando o resultado bate ou a diferença é explicada.'],
-      ['Você trabalha com empresas de fora do Brasil?', 'Sim. Trabalho remoto no fuso UTC-3, com sobreposição total ao horário comercial dos EUA e da Europa, e inglês avançado.'],
-      ['Quais nuvens e ferramentas você usa?', 'Azure (Data Factory, Databricks, ADLS Gen2) e Google Cloud (BigQuery, Dataflow), com dbt, Airflow, Power BI e Qlik.'],
-      ['Como começar?', 'Chame no WhatsApp ou por e-mail contando qual rotina ou relatório incomoda mais. Respondo com os próximos passos e o que preciso para um diagnóstico.'],
-    ],
-    ctaH: 'Tem uma rotina legada travando seu time?', ctaP: 'Conte o cenário em duas linhas. Respondo rápido.',
-    foot: 'Londrina, Paraná, Brasil · UTC-3',
-  },
-  en: {
-    lang: 'en', alt: 'pt-BR', altUrl: SITE + '/', url: SITE + '/en/', og: 'en_US',
-    title: 'Data Engineer | Legacy SQL Server to Databricks Lakehouse Migration | Felipe Marinho',
-    desc: 'Data Engineer with 9+ years. I migrate legacy SQL Server stored procedures to PySpark on Databricks, preserving business rules and proving it with reconciliation. Azure, Delta Lake, ADF, dbt. Remote, UTC-3.',
-    skip: 'Skip to content',
-    switchLabel: 'PT', switchTitle: 'Ler em português',
-    term: ['whoami', 'felipe_marinho // data_engineer', 'stack', 'azure databricks pyspark delta sql', 'status', 'open to remote projects'],
-    h1a: 'Your legacy SQL Server,', h1b: 'now a Lakehouse.',
-    sub: 'I am Felipe Marinho, a Data Engineer with 9+ years. I turn stored procedures and batch routines into PySpark pipelines on Azure Databricks, <b>preserving business rules</b> and <b>proving with reconciliation</b> that the new output matches the old one.',
-    cta1: 'Message on WhatsApp', cta2: 'View LinkedIn', cta3: 'Send an email',
-    waText: 'Hi Felipe, I saw your website and would like to talk about data.',
-    badges: ['9+ years in data', 'Azure · Databricks · GCP', 'Remote from Brazil, UTC-3', 'Advanced English'],
-    probH: 'The problem', probP: 'Years of business rules living inside stored procedures nobody wants to touch. Batch jobs that take hours, reports that run late, and a server that costs a lot to do what the cloud does better. Migrating is scary because nobody can prove the new number equals the old one.',
-    delH: 'What I deliver',
-    del: [
-      ['SQL Server to Databricks migration', 'T-SQL and batch routines become PySpark and Delta Lake, with business rules preserved and reconciliation controls that compare the new output with the old one.'],
-      ['ETL/ELT pipelines', 'Azure Data Factory, Databricks, dbt and Airflow: incremental loads, monitoring and alerting, so you know before your users do.'],
-      ['Lakehouse and medallion architecture', 'Bronze, silver and gold layers on Delta Lake over ADLS Gen2, with data modeling and performance tuning.'],
-      ['BI and dashboards', 'Power BI, Qlik Sense and QlikView on top of trustworthy data, so leadership decides without side spreadsheets.'],
-      ['Quality and governance', 'Validation, profiling, source-to-target testing, LGPD compliance, auditing and access control.'],
-    ],
-    howH: 'How I work',
-    how: [['Assessment', 'Inventory of routines, dependencies and business rules.'], ['Batch migration', 'PySpark and Delta Lake, one routine at a time, without stopping operations.'], ['Reconciliation', 'Totals and rows compared between legacy and new, with a differences report.'], ['Operations', 'Monitoring, alerts and documentation so your team can take over.']],
-    stackH: 'Stack',
-    stack: ['Azure Data Factory', 'Azure Databricks', 'ADLS Gen2', 'Apache Spark', 'PySpark', 'Delta Lake', 'dbt', 'Airflow', 'SQL Server', 'T-SQL', 'PostgreSQL', 'BigQuery', 'Dataflow', 'Power BI', 'Qlik Sense', 'Python'],
-    expH: 'Track record',
-    exp: [
-      ['2025 → now', 'Data Engineer · AGGRANDIZE', 'Pipelines on Azure Data Factory and Databricks, Power BI dashboards, LGPD and access control. Contract, remote.'],
-      ['2023 → 2025', 'Data Engineer · Localiza&Co', 'Python, dbt, Airflow and Google Cloud (BigQuery, Dataflow, Cloud Storage).'],
-      ['2021 → 2023', 'BI Consultant · Unidas', 'ETL and dashboards in QlikView and Qlik Sense. Outstanding Service Provider award from the BI team (2022).'],
-      ['2017 → 2021', 'Systems Analyst · BRID Soluções', 'Full-stack PHP development and BI for agribusiness.'],
-      ['before', 'SAP GRC · Atos, and front-end · Agência Digital ICOMP', 'Foundation in systems, web and technical support since 2009.'],
-    ],
-    credH: 'Education and certifications',
-    cred: ['B.Sc. in Computer Science, plus one year of study at Kent State University (Ohio, USA)', 'Databricks Fundamentals (Academy Accreditation)', 'Google Cloud Big Data and Machine Learning Fundamentals', 'Advanced English'],
-    pxH: 'I also build products', pxP: 'At ProxyUS, in Londrina, Brazil, I build AI and data products for businesses:',
-    px: [['AtendeAI', 'AI assistant on WhatsApp, 24/7.'], ['BizBot', 'Chat with your company data on WhatsApp.'], ['ProxyBI', 'All your KPIs in a single dashboard.']],
-    pxLink: 'Visit ProxyUS',
-    faqH: 'Frequently asked questions',
-    faq: [
-      ['How do you migrate SQL Server stored procedures to Databricks?', 'First I inventory the routines and their dependencies. Then I rewrite each one in PySpark with Delta Lake, keeping the business rules, and validate with reconciliation controls that compare totals and rows between legacy and new before the old one is switched off.'],
-      ['How do you prove the new output equals the old one?', 'With reconciliation: I compare counts, sums and row-level samples between both outputs and deliver a differences report. A routine counts as migrated only when results match or every difference is explained.'],
-      ['Do you work with companies outside Brazil?', 'Yes. I work remotely at UTC-3, with full overlap with US and European business hours, and advanced English.'],
-      ['Which clouds and tools do you use?', 'Azure (Data Factory, Databricks, ADLS Gen2) and Google Cloud (BigQuery, Dataflow), with dbt, Airflow, Power BI and Qlik.'],
-      ['How do we start?', 'Message me on WhatsApp or email telling me which routine or report hurts the most. I reply with next steps and what I need for an assessment.'],
-    ],
-    ctaH: 'Legacy routines slowing your team down?', ctaP: 'Describe the scenario in two lines. I reply fast.',
-    foot: 'Londrina, Paraná, Brazil · UTC-3',
-  },
-};
+const T = require('./conteudo')(SITE);
 
 const esc = s => String(s).replace(/&(?!amp;|lt;|gt;)/g, '&amp;');
 
@@ -217,7 +118,7 @@ function pagina(k) {
   const ld = [
     { '@context': 'https://schema.org', '@type': 'Person', name: 'Felipe Marinho', url: t.url, jobTitle: k === 'pt' ? 'Engenheiro de Dados' : 'Data Engineer',
       description: t.desc, sameAs: [LINKEDIN, PROXYUS], email: EMAIL, address: { '@type': 'PostalAddress', addressLocality: 'Londrina', addressRegion: 'PR', addressCountry: 'BR' },
-      knowsAbout: ['Azure Databricks', 'PySpark', 'Delta Lake', 'SQL Server', 'Azure Data Factory', 'dbt', 'Apache Airflow', 'Power BI', 'Qlik Sense', 'Data Engineering'], knowsLanguage: ['pt-BR', 'en'] },
+      knowsAbout: ['Data Warehouse', 'PostgreSQL', 'DuckDB', 'Business Intelligence', 'Dashboards', 'Chatbots com IA', 'WhatsApp', 'Python', 'dbt', 'Apache Airflow', 'Power BI', 'Qlik Sense', 'ETL', 'Azure Databricks', 'Data Engineering'], knowsLanguage: ['pt-BR', 'en'] },
     { '@context': 'https://schema.org', '@type': 'ProfessionalService', name: 'Felipe Marinho · ' + (k === 'pt' ? 'Engenharia de Dados' : 'Data Engineering'), url: t.url,
       areaServed: 'Worldwide', serviceType: t.del.map(d => d[0]), provider: { '@type': 'Person', name: 'Felipe Marinho' } },
     { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: t.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) },
@@ -250,11 +151,11 @@ function pagina(k) {
 
 <section><h2>${t.probH}</h2><p>${esc(t.probP)}</p></section>
 <section><h2>${t.delH}</h2><div class="grid">${t.del.map(([a, b]) => `<div class="card"><h3>${esc(a)}</h3><p>${esc(b)}</p></div>`).join('')}</div></section>
+<section><h2>${t.pxH}</h2><p>${esc(t.pxP)}</p><div class="grid" style="margin:14px 0">${t.px.map(([a, b]) => `<div class="card"><h3>${a}</h3><p>${esc(b)}</p></div>`).join('')}</div><a class="btn" href="${PROXYUS}" rel="noopener">${t.pxLink}</a></section>
 <section><h2>${t.howH}</h2><ol class="steps">${t.how.map(([a, b]) => `<li><b>${esc(a)}</b>${esc(b)}</li>`).join('')}</ol></section>
 <section><h2>${t.stackH}</h2><ul class="tags">${t.stack.map(s => `<li>${esc(s)}</li>`).join('')}</ul></section>
 <section><h2>${t.expH}</h2><ul class="log">${t.exp.map(([d, a, b]) => `<li><time>${esc(d)}</time><b>${esc(a)}</b><br>${esc(b)}</li>`).join('')}</ul></section>
 <section><h2>${t.credH}</h2><ul class="ul">${t.cred.map(c => `<li>${esc(c)}</li>`).join('')}</ul></section>
-<section><h2>${t.pxH}</h2><p>${esc(t.pxP)}</p><div class="grid" style="margin:14px 0">${t.px.map(([a, b]) => `<div class="card"><h3>${a}</h3><p>${esc(b)}</p></div>`).join('')}</div><a class="btn" href="${PROXYUS}" rel="noopener">${t.pxLink}</a></section>
 <section><h2>${t.faqH}</h2>${t.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</section>
 <section class="final"><h2>${esc(t.ctaH)}</h2><p>${esc(t.ctaP)}</p><div class="cta"><a class="btn p" href="${wa}" rel="noopener">${t.cta1}</a><a class="btn" href="mailto:${EMAIL}">${t.cta3}</a><a class="btn" href="${LINKEDIN}" rel="me noopener">${t.cta2}</a></div></section>
 </main>
