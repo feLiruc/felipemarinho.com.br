@@ -18,3 +18,13 @@ Contatos ficam nas constantes `EMAIL` e `WHATS` de `build.js`.
 
 Imagem de compartilhamento (precisa do Brave/Chrome):
 `brave --headless=new --window-size=1200,630 --screenshot=dist/og-3d.png file:///.../og-src.html`
+
+## Página /databricks/ (Trilha Databricks)
+
+`databricks.js` gera `dist/databricks/index.html` (tutorial + download) quando existe `dist/downloads/trilha-databricks.json`.
+Para publicar uma versão nova do pacote:
+
+```bash
+node ../estudo-databricks/empacotar.js dist/downloads/trilha-databricks.zip   # gera o zip e o .json (versão, tamanho, SHA-256)
+bash deploy.sh "Trilha Databricks: nova versão"
+```

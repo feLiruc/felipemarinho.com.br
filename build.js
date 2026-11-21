@@ -179,9 +179,12 @@ fs.writeFileSync(path.join(dist, 'en', 'index.html'), pagina('en'));
 fs.writeFileSync(path.join(dist, 'favicon.svg'), '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#000"/><text x="4" y="22" font-family="monospace" font-size="18" font-weight="700" fill="#00ff41">&gt;_</text></svg>');
 fs.writeFileSync(path.join(dist, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 const hoje = new Date().toISOString().slice(0, 10);
+// Página /databricks/ (tutorial + download da Trilha Databricks), só se o pacote estiver em dist/downloads/
+const pagDbx = require('./databricks')({ CSS, JS, SITE, LINKEDIN, EMAIL, esc, dist });
 fs.writeFileSync(path.join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n` +
   [['/', 'pt-BR', '/en/', 'en'], ['/en/', 'en', '/', 'pt-BR']].map(([u, l1, u2, l2]) =>
-    `<url><loc>${SITE}${u}</loc><lastmod>${hoje}</lastmod><xhtml:link rel="alternate" hreflang="${l1}" href="${SITE}${u}"/><xhtml:link rel="alternate" hreflang="${l2}" href="${SITE}${u2}"/></url>`).join('\n') + `\n</urlset>\n`);
+    `<url><loc>${SITE}${u}</loc><lastmod>${hoje}</lastmod><xhtml:link rel="alternate" hreflang="${l1}" href="${SITE}${u}"/><xhtml:link rel="alternate" hreflang="${l2}" href="${SITE}${u2}"/></url>`).join('\n') +
+  (pagDbx ? `\n<url><loc>${SITE}${pagDbx}</loc><lastmod>${hoje}</lastmod></url>` : '') + `\n</urlset>\n`);
 fs.writeFileSync(path.join(dist, '.htaccess'), `# Velocidade e segurança (Apache). Gerado por build.js
 <IfModule mod_deflate.c>
 AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml text/xml application/xml text/plain
