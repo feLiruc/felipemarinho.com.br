@@ -157,6 +157,7 @@ function pagina(k) {
 <section><h2>${t.probH}</h2><p>${esc(t.probP)}</p></section>
 <section><h2>${t.delH}</h2><div class="grid">${t.del.map(([a, b]) => `<div class="card"><h3>${esc(a)}</h3><p>${esc(b)}</p></div>`).join('')}</div></section>
 <section><h2>${t.howH}</h2><ol class="steps">${t.how.map(([a, b]) => `<li><b>${esc(a)}</b>${esc(b)}</li>`).join('')}</ol></section>
+${t.free ? `<section><h2>${t.freeH}</h2><div class="grid">${t.free.map(([a, b, u, l]) => `<div class="card"><h3>${esc(a)}</h3><p>${esc(b)}</p><p style="margin-top:12px"><a class="btn" href="${u}">${esc(l)}</a></p></div>`).join('')}</div></section>` : ''}
 <section><h2>${t.stackH}</h2><ul class="tags">${t.stack.map(s => `<li>${esc(s)}</li>`).join('')}</ul></section>
 <section><h2>${t.expH}</h2><ul class="log">${t.exp.map(([d, a, b]) => `<li><time>${esc(d)}</time><b>${esc(a)}</b><br>${esc(b)}</li>`).join('')}</ul></section>
 <section><h2>${t.credH}</h2><ul class="ul">${t.cred.map(c => `<li>${esc(c)}</li>`).join('')}</ul></section>
