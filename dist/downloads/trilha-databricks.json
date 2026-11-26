@@ -2,6 +2,8 @@
  "versao": "2026-11-26",
  "questoes": 646,
  "objetivos": 32,
- "bytes": 280594,
- "sha256": "1b73e31c4948d6ff6f36c6551d9718d59c098619ec6b192219c7a2aac30c6c06"
+ "questoesPro": 677,
+ "objetivosPro": 45,
+ "bytes": 546567,
+ "sha256": "d8772c9f2290a563682e129d13d70d026d27caf8d9cb20dd21e2617a1ec43a21"
 }

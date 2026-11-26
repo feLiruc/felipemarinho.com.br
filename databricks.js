@@ -14,8 +14,8 @@ module.exports = function gerar({ CSS, JS, SITE, LINKEDIN, EMAIL, esc, dist }) {
   const dataBR = M.versao.split('-').reverse().join('/');
   const url = SITE + '/databricks/';
   const zip = '/downloads/trilha-databricks.zip?v=' + M.sha256.slice(0, 8);
-  const title = 'Trilha Databricks grátis: estudo para a certificação Data Engineer Associate';
-  const desc = `Aulas, ${M.questoes} questões comentadas, flashcards, simulados e um laboratório Spark + Delta Lake que roda no seu computador com Docker, sem conta e sem login.`;
+  const title = 'Trilha Databricks grátis: estudo para as certificações Data Engineer Associate e Professional';
+  const desc = `Duas trilhas (Associate e Professional), aulas, ${M.questoes + (M.questoesPro || 0)} questões comentadas, flashcards, simulados e um laboratório Spark + Delta Lake que roda no seu computador com Docker, sem conta e sem login.`;
   const DOCKER = 'https://www.docker.com/products/docker-desktop/';
 
   const css = CSS + `
@@ -40,9 +40,10 @@ td:first-child{color:#fff;white-space:nowrap;padding-right:14px}
 `.replace(/\s*\n\s*/g, '');
 
   const inclui = [
-    ['Aulas por objetivo', 'Os 32 objetivos do guia oficial do exame, com aula para ler, exemplos e um resumo para revisar. No fim de cada parte há links para a documentação oficial da Databricks, para você ir mais fundo.'],
+    ['Aulas por objetivo', 'Os objetivos dos guias oficiais dos exames, com aula para ler, exemplos e um resumo para revisar. No fim de cada parte há links para a documentação oficial da Databricks, para você ir mais fundo.'],
     ['Guia da plataforma', 'Mapa da plataforma em camadas, produtos com o estágio de cada um (GA, Beta, preview), padrões de arquitetura, trilha de certificações, cursos oficiais da Academy (muitos em português) e um glossário, tudo ligado às aulas.'],
-    [`${M.questoes} questões comentadas`, 'Cada desafio sorteia 10 de uma base de 20 por objetivo. Em cada uma você vê por que a certa é a certa e por que cada errada está errada.'],
+    ['Duas trilhas, cada uma com o seu progresso', `Associate (${M.objetivos} objetivos, ${M.questoes} questões) e Professional (${M.objetivosPro || 0} objetivos, ${M.questoesPro || 0} questões, com laboratórios e simulado de 60 questões). Um botão no topo do app troca de trilha, e o percentual de conclusão de cada uma aparece ali.`],
+    [`${M.questoes + (M.questoesPro || 0)} questões comentadas`, 'Cada desafio sorteia 10 de uma base de 20 por objetivo. Em cada uma você vê por que a certa é a certa e por que cada errada está errada.'],
     ['Jornada guiada', 'Um passo a passo do zero até a prova: aula, laboratório, desafio e flashcards, com checkpoints e simulados cronometrados.'],
     ['Laboratório local', 'Spark 4, Delta Lake 4 e PostgreSQL rodando no seu computador. Você escreve e executa o código direto no app, sem criar conta em lugar nenhum.'],
     ['Revisão espaçada', 'Os flashcards e os erros voltam na hora certa, e o caderno de erros guarda o que você precisa rever.'],
@@ -58,7 +59,8 @@ td:first-child{color:#fff;white-space:nowrap;padding-right:14px}
     ['Funciona no Mac com chip M1, M2, M3 ou M4?', 'Sim. O pacote funciona em Intel, AMD e Apple Silicon.'],
     ['Dá para estudar pelo celular?', 'Dá, na mesma rede Wi-Fi do computador. O passo a passo está no arquivo LEIA-ME.txt do pacote. Como o laboratório executa código, só faça isso numa rede de confiança.'],
     ['É oficial? Tem questões da prova?', 'Não. É um material independente, sem vínculo com a Databricks, escrito a partir do guia público do exame. Não tem questões vazadas da prova real (usar dumps viola as regras da certificação).'],
-    ['Como atualizo para uma versão nova?', 'Baixe o zip de novo, extraia por cima da mesma pasta e rode iniciar. O progresso fica num volume do Docker e não se perde.'],
+    ['Como atualizo para uma versão nova?', 'Baixe o zip de novo, extraia por cima da mesma pasta e rode iniciar. O progresso e as tabelas que você criou ficam num volume do Docker e não se perdem. Se você baixou uma versão antiga, a atualização também acerta as permissões da pasta de dados sozinha.'],
+    ['O laboratório é seguro?', 'O código que você digita roda dentro de um contêiner sem internet, sem acesso ao seu computador e sem privilégios de administrador, com limite de memória, de processos e de tempo por célula. Mesmo assim, não rode o pacote num computador com dados sensíveis expostos na rede.'],
   ];
 
   const ld = [
@@ -85,7 +87,7 @@ td:first-child{color:#fff;white-space:nowrap;padding-right:14px}
 <main id="c" class="w">
 <div class="hero1">
 <h1>Trilha <span>Databricks</span></h1>
-<p class="sub">Um curso completo e gratuito para a certificação <b>Databricks Certified Data Engineer Associate</b>: aulas, ${M.questoes} questões comentadas, flashcards, simulados e um laboratório Spark + Delta Lake que roda no seu computador. Sem conta, sem login e sem pagar nuvem.</p>
+<p class="sub">Um curso completo e gratuito para as certificações <b>Databricks Certified Data Engineer Associate</b> e <b>Professional</b>, em duas trilhas separadas: aulas, ${M.questoes + (M.questoesPro || 0)} questões comentadas, flashcards, simulados e um laboratório Spark + Delta Lake que roda no seu computador. Sem conta, sem login e sem pagar nuvem.</p>
 <div class="dl"><a class="btn p" href="${zip}" download>Baixar a Trilha (zip, ${kb} KB)</a><a class="btn" href="#passo">Ver o passo a passo</a></div>
 <p class="meta">Versão ${dataBR} · Windows, Mac e Linux · SHA-256: ${M.sha256}</p>
 </div>
