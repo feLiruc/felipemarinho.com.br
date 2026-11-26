@@ -40,7 +40,8 @@ td:first-child{color:#fff;white-space:nowrap;padding-right:14px}
 `.replace(/\s*\n\s*/g, '');
 
   const inclui = [
-    ['Aulas por objetivo', 'Os 32 objetivos do guia oficial do exame, com aula para ler, exemplos e um resumo para revisar.'],
+    ['Aulas por objetivo', 'Os 32 objetivos do guia oficial do exame, com aula para ler, exemplos e um resumo para revisar. No fim de cada parte há links para a documentação oficial da Databricks, para você ir mais fundo.'],
+    ['Guia da plataforma', 'Mapa da plataforma em camadas, produtos com o estágio de cada um (GA, Beta, preview), padrões de arquitetura, trilha de certificações, cursos oficiais da Academy (muitos em português) e um glossário, tudo ligado às aulas.'],
     [`${M.questoes} questões comentadas`, 'Cada desafio sorteia 10 de uma base de 20 por objetivo. Em cada uma você vê por que a certa é a certa e por que cada errada está errada.'],
     ['Jornada guiada', 'Um passo a passo do zero até a prova: aula, laboratório, desafio e flashcards, com checkpoints e simulados cronometrados.'],
     ['Laboratório local', 'Spark 4, Delta Lake 4 e PostgreSQL rodando no seu computador. Você escreve e executa o código direto no app, sem criar conta em lugar nenhum.'],
